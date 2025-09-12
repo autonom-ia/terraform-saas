@@ -1,0 +1,38 @@
+# Terraform local state and caches
+.terraform/
+.terraform.tfstate.lock.info
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform plans
+*.tfplan
+*.plan
+
+# Sensitive variables
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+.env
+.env.*
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Logs and temporary files
+crash.log
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.bkp
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
