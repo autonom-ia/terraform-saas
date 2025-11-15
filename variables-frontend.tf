@@ -9,7 +9,8 @@ variable "frontend_domains" {
   type        = list(string)
   default     = [
     "portal.autonomia.site",
-    "empresta.autonomia.site"
+    "empresta.autonomia.site",
+    "copar.autonomia.site"
   ]
 }
 

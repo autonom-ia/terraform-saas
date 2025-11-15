@@ -58,6 +58,31 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+# CloudFront Function to rewrite URLs for static export with trailing slash
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "${var.project}-${var.environment}-url-rewrite"
+  runtime = "cloudfront-js-1.0"
+  comment = "Rewrite URLs to support Next.js static export with trailingSlash"
+  publish = true
+  code    = <<-EOT
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+  
+  // If URI ends with /, append index.html
+  if (uri.endsWith('/')) {
+    request.uri = uri + 'index.html';
+  }
+  // If URI has no extension and no trailing slash, add /index.html
+  else if (!uri.includes('.')) {
+    request.uri = uri + '/index.html';
+  }
+  
+  return request;
+}
+EOT
+}
+
 # CloudFront distribution
 resource "aws_cloudfront_distribution" "frontend" {
   enabled             = true
@@ -89,21 +114,15 @@ resource "aws_cloudfront_distribution" "frontend" {
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
+
+    # Attach CloudFront Function to rewrite URLs
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
   }
 
-  # SPA fallback: serve index.html for 404/403 so client-side routing works
-  custom_error_response {
-    error_code            = 404
-    response_code         = 200
-    response_page_path    = "/index.html"
-    error_caching_min_ttl = 0
-  }
-  custom_error_response {
-    error_code            = 403
-    response_code         = 200
-    response_page_path    = "/index.html"
-    error_caching_min_ttl = 0
-  }
+  # Removed custom_error_response - files should exist in S3 with static export
 
   restrictions {
     geo_restriction {
