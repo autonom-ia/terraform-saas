@@ -1,0 +1,32 @@
+# Configuração para ambiente STAGING
+# Copie este arquivo para terraform.tfvars e ajuste os valores
+
+aws_region = "us-east-1"
+project    = "autonomia"
+environment = "staging"
+
+# VPC Configuration (mesma VPC de prod)
+vpc_id      = "vpc-0a8017d897d762238"
+subnet_a_id = "subnet-07184b6cfa97367e2"
+subnet_b_id = "subnet-000fbcffe0f8d9a11"
+
+# Security Group (mesmo security group de prod)
+rds_security_group_id = "sg-0e9189ca9e6d0427d"
+
+# RDS Configuration (menor que prod)
+database_name     = "autonomia_db"
+database_username = "autonomia_admin"
+database_password = "SUA_SENHA_STAGING_AQUI"  # IMPORTANTE: Alterar para senha segura
+instance_class    = "db.t3.micro"  # Menor possível
+allocated_storage = 5  # Mínimo (5GB)
+
+# Clients Database
+clients_database_name     = "autonomia_clients"
+clients_database_username = "autonomia_clients_admin"
+clients_database_password = "SUA_SENHA_CLIENTS_STAGING_AQUI"  # IMPORTANTE: Alterar para senha segura
+
+# SSM Parameters
+db_password = "SUA_SENHA_STAGING_AQUI"  # Mesma senha do database_password
+db_password_empresa_cwt = "SUA_SENHA_CHATWOOT_AQUI"  # Se necessário
+
+

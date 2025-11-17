@@ -19,13 +19,13 @@ resource "aws_elasticache_subnet_group" "autonomia_cache_subnet_group" {
 resource "aws_elasticache_cluster" "autonomia_cache" {
   cluster_id           = "${var.project}-${var.environment}-cache"
   engine               = "redis"
-  node_type            = "cache.t3.micro"  # Tipo menor/mais econômico
+  node_type            = "cache.t3.micro" # Tipo menor/mais econômico
   num_cache_nodes      = 1
   parameter_group_name = "default.redis6.x"
   engine_version       = "6.2"
   port                 = 6379
   subnet_group_name    = aws_elasticache_subnet_group.autonomia_cache_subnet_group.name
-  security_group_ids   = [var.rds_security_group_id]  # Usar o mesmo security group do RDS
+  security_group_ids   = [var.rds_security_group_id] # Usar o mesmo security group do RDS
 
   tags = {
     Name        = "${var.project}-cache"
@@ -62,7 +62,7 @@ resource "aws_ssm_parameter" "cache_ttl" {
   name        = "/autonomia/${var.environment}/cache/ttl"
   description = "Tempo de vida do cache em segundos"
   type        = "String"
-  value       = "300"  # 5 minutos por padrão
+  value       = "300" # 5 minutos por padrão
   overwrite   = true
 }
 

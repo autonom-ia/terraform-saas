@@ -1,72 +1,64 @@
-# Autonom.ia RDS Terraform Configuration
+# Terraform SaaS - Autonomia
 
-Este projeto contém a configuração Terraform para criar um banco de dados PostgreSQL RDS na AWS que pode ser acessado pela internet.
+Infraestrutura como Código (IaC) para os ambientes de produção e staging da Autonomia.
 
-## Pré-requisitos
+## 📚 Documentação
 
-- Terraform 1.0.0 ou superior
-- AWS CLI configurado com credenciais de acesso
-- Acesso à AWS com permissões para criar recursos RDS
+Toda a documentação está na pasta [`docs/`](./docs/):
 
-## Estrutura do Projeto
+- **[README.md](./docs/README.md)** - Documentação principal do projeto
+- **[DEPLOY.md](./docs/DEPLOY.md)** - Guia de deploy para prod e staging
+- **[ENV_SETUP.md](./docs/ENV_SETUP.md)** - Configuração de variáveis de ambiente
+- **[COST_OPTIMIZATION.md](./docs/COST_OPTIMIZATION.md)** - Otimização de custos
+- **[ECONOMIA_STAGING.md](./docs/ECONOMIA_STAGING.md)** - Estratégias de economia para staging
+- **[CRIAR_DATABASE_CLIENTS.md](./docs/CRIAR_DATABASE_CLIENTS.md)** - Como criar o database clients
 
-- `main.tf` - Configuração principal do Terraform
-- `variables.tf` - Definição das variáveis utilizadas
-- `terraform.tfvars` - Valores das variáveis (incluindo senhas)
+## 🚀 Quick Start
 
-## Recursos Criados
-
-- Grupo de segurança para o RDS
-- Grupo de sub-redes para o RDS
-- Instância RDS PostgreSQL
-
-## Configuração
-
-Antes de aplicar esta configuração, edite o arquivo `terraform.tfvars` para definir uma senha segura para o banco de dados:
-
-```hcl
-database_password = "SuaSenhaSeguraAqui"
-```
-
-## Uso
-
-Para inicializar o Terraform:
+### Setup Inicial
 
 ```bash
-cd /Users/robertomartins/Workspace/autonom.ia/terraform
+# 1. Configurar credenciais de produção
+cp .env.prod.example .env.prod
+# Editar .env.prod com suas credenciais
+
+# 2. Configurar credenciais de staging
+cp .env.staging.example .env.staging
+# Editar .env.staging com suas credenciais
+
+# 3. Inicializar Terraform
 terraform init
 ```
 
-Para verificar o plano de execução:
+### Deploy
 
 ```bash
+# Para PRODUÇÃO
+source load-env.sh prod
+terraform workspace select prod
 terraform plan
-```
+terraform apply
 
-Para aplicar a configuração:
-
-```bash
+# Para STAGING
+source load-env.sh staging
+terraform workspace select staging
+terraform plan
 terraform apply
 ```
 
-## Conexão ao Banco de Dados
+## 📋 Recursos Gerenciados
 
-Após a criação do banco de dados, você pode se conectar a ele usando o endpoint fornecido na saída do Terraform:
+- **RDS PostgreSQL** - Banco de dados principal
+- **SSM Parameters** - Parâmetros de configuração
+- **ElastiCache Redis** - Cache (opcional)
+- **S3 + CloudFront** - Frontend e Knowledge Base (opcional)
 
-```bash
-psql -h <db_endpoint> -U autonomia_admin -d autonomia_db
-```
+## 🔐 Segurança
 
-## Segurança
+- Credenciais sensíveis são armazenadas em `.env.prod` e `.env.staging`
+- Arquivos `.env*` estão no `.gitignore` e não são commitados
+- Use sempre os arquivos `.example` como referência
 
-- O banco de dados está configurado para ser acessível pela internet (publicly_accessible = true)
-- O grupo de segurança permite tráfego na porta 5432 de qualquer IP (0.0.0.0/0)
-- Em um ambiente de produção, considere restringir o acesso a IPs específicos
+## 📖 Mais Informações
 
-## Limpeza
-
-Para destruir os recursos criados:
-
-```bash
-terraform destroy
-```
+Consulte a [documentação completa](./docs/) para mais detalhes.

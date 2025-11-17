@@ -37,6 +37,7 @@ resource "aws_ssm_parameter" "empresta_chatwoot_db_user" {
 }
 
 resource "aws_ssm_parameter" "empresta_chatwoot_db_password" {
+  count       = var.db_password_empresa_cwt != "" ? 1 : 0
   name        = "/empresta/chatwoot/db/password"
   description = "Senha do banco de dados PostgreSQL da empresta Chatwoot"
   type        = "SecureString"
@@ -78,6 +79,7 @@ resource "aws_ssm_parameter" "autonomia_chatwoot_db_user" {
 }
 
 resource "aws_ssm_parameter" "autonomia_chatwoot_db_password" {
+  count       = var.db_password_empresa_cwt != "" ? 1 : 0
   name        = "/autonomia/chatwoot/db/password"
   description = "Senha do banco de dados PostgreSQL da autonomia Chatwoot"
   type        = "SecureString"
@@ -90,7 +92,7 @@ resource "aws_ssm_parameter" "db_host" {
   name        = "/autonomia/${var.environment}/db/host"
   description = "Host do banco de dados PostgreSQL"
   type        = "String"
-  value       = "autonomia-prod-db.cde6ocsqc6dk.us-east-1.rds.amazonaws.com"
+  value       = aws_db_instance.main.address
   overwrite   = true
 }
 
@@ -114,13 +116,13 @@ resource "aws_ssm_parameter" "db_user" {
   name        = "/autonomia/${var.environment}/db/user"
   description = "Usuário do banco de dados PostgreSQL"
   type        = "String"
-  value       = "autonomia_admin"
+  value       = var.database_username
   overwrite   = true
 }
 
-# Parâmetros para o banco de dados de clientes
+# Parâmetros para o banco de dados de clientes (separados por ambiente)
 resource "aws_ssm_parameter" "clients_db_host" {
-  name        = "/autonomia/clients/db/host"
+  name        = "/autonomia/${var.environment}/clients/db/host"
   description = "Host do banco de dados PostgreSQL de clientes"
   type        = "String"
   value       = aws_db_instance.main.address
@@ -128,7 +130,7 @@ resource "aws_ssm_parameter" "clients_db_host" {
 }
 
 resource "aws_ssm_parameter" "clients_db_port" {
-  name        = "/autonomia/clients/db/port"
+  name        = "/autonomia/${var.environment}/clients/db/port"
   description = "Porta do banco de dados PostgreSQL de clientes"
   type        = "String"
   value       = "5432"
@@ -136,7 +138,7 @@ resource "aws_ssm_parameter" "clients_db_port" {
 }
 
 resource "aws_ssm_parameter" "clients_db_name" {
-  name        = "/autonomia/clients/db/name"
+  name        = "/autonomia/${var.environment}/clients/db/name"
   description = "Nome do banco de dados PostgreSQL de clientes"
   type        = "String"
   value       = var.clients_database_name
@@ -144,7 +146,7 @@ resource "aws_ssm_parameter" "clients_db_name" {
 }
 
 resource "aws_ssm_parameter" "clients_db_user" {
-  name        = "/autonomia/clients/db/user"
+  name        = "/autonomia/${var.environment}/clients/db/user"
   description = "Usuário do banco de dados PostgreSQL de clientes"
   type        = "String"
   value       = var.clients_database_username
@@ -152,7 +154,7 @@ resource "aws_ssm_parameter" "clients_db_user" {
 }
 
 resource "aws_ssm_parameter" "clients_db_password" {
-  name        = "/autonomia/clients/db/password"
+  name        = "/autonomia/${var.environment}/clients/db/password"
   description = "Senha do banco de dados PostgreSQL de clientes"
   type        = "SecureString"
   value       = var.clients_database_password

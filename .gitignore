@@ -2,6 +2,12 @@
 .terraform/
 .terraform.tfstate.lock.info
 
+# Terraform workspace files
+.terraform.tfstate.lock.info
+.terraform.lock.hcl
+.terraform.lock.info
+.terraform.lock.info
+
 # Terraform state files
 *.tfstate
 *.tfstate.*
@@ -13,6 +19,7 @@
 # Sensitive variables
 terraform.tfvars
 *.tfvars
+!*.tfvars.example
 *.tfvars.json
 .env
 .env.*

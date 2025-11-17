@@ -19,7 +19,7 @@ variable "knowledge_bucket_enable_public" {
 variable "portal_allowed_origins" {
   description = "Origins allowed to GET from the knowledge bucket when CORS is used"
   type        = list(string)
-  default     = [
+  default = [
     "https://portal.autonomia.site",
     "http://localhost:3000",
     "https://auto.autonomia.site"

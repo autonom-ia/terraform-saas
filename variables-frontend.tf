@@ -7,7 +7,7 @@ variable "frontend_bucket_name" {
 variable "frontend_domains" {
   description = "Aliases for the CloudFront distribution"
   type        = list(string)
-  default     = [
+  default = [
     "portal.autonomia.site",
     "empresta.autonomia.site",
     "copar.autonomia.site"

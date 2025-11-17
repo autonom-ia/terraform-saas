@@ -1,0 +1,32 @@
+# Configuração para ambiente PRODUÇÃO
+# Copie este arquivo para terraform.tfvars e ajuste os valores
+
+aws_region = "us-east-1"
+project    = "autonomia"
+environment = "prod"
+
+# VPC Configuration
+vpc_id      = "vpc-0a8017d897d762238"
+subnet_a_id = "subnet-07184b6cfa97367e2"
+subnet_b_id = "subnet-000fbcffe0f8d9a11"
+
+# Security Group (mesmo security group de staging)
+rds_security_group_id = "sg-0c390fba1a6e39feb"  # autonomia-prod-rds-sg
+
+# RDS Configuration (valores reais do RDS prod existente)
+database_name     = "autonomia_db"
+database_username = "autonomia_admin"
+# database_password será lido do arquivo .env.prod (TF_VAR_database_password)
+instance_class    = "db.t3.micro"
+allocated_storage = 5  # Valor real do RDS prod existente
+
+# Clients Database
+clients_database_name     = "autonomia_clients"
+clients_database_username = "autonomia_clients_admin"
+clients_database_password = "SUA_SENHA_CLIENTS_PROD_AQUI"  # IMPORTANTE: Alterar para senha segura
+
+# SSM Parameters
+db_password = "SUA_SENHA_PROD_AQUI"  # Mesma senha do database_password
+db_password_empresa_cwt = "SUA_SENHA_CHATWOOT_AQUI"  # Se necessário
+
+

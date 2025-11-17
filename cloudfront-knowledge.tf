@@ -11,9 +11,9 @@ resource "aws_cloudfront_origin_access_control" "kb_oac" {
 
 # CloudFront Distribution to serve the knowledge bucket
 resource "aws_cloudfront_distribution" "kb_cdn" {
-  enabled             = true
-  comment             = "Autonomia Knowledge Base CDN"
-  aliases             = ["kb-docs.autonomia.site"]
+  enabled = true
+  comment = "Autonomia Knowledge Base CDN"
+  aliases = ["kb-docs.autonomia.site"]
 
   origin {
     domain_name              = aws_s3_bucket.knowledge.bucket_regional_domain_name
@@ -59,8 +59,8 @@ resource "aws_s3_bucket_policy" "knowledge_cf_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid      = "AllowCloudFrontServicePrincipalReadOnly",
-        Effect   = "Allow",
+        Sid    = "AllowCloudFrontServicePrincipalReadOnly",
+        Effect = "Allow",
         Principal = {
           Service = "cloudfront.amazonaws.com"
         },
